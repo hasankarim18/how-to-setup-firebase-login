@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 import app from '../firebase.config.js'
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+  GithubAuthProvider,
+} from "firebase/auth";
 
 
 const Login = () => {
     const [user, setUser] = useState(null)
     const auth = getAuth()
-    const provider = new GoogleAuthProvider()
+    const googleProvider = new GoogleAuthProvider()
+    const githubProvider = new GithubAuthProvider();
 
 
 
     const googleLoginHandler = ()=> {        
-        signInWithPopup(auth, provider)
+        signInWithPopup(auth, googleProvider)
         .then((result) => {
             console.log("sing up");
             const loggedInUser = result.user;
@@ -22,7 +28,18 @@ const Login = () => {
             console.log(error);
         });
     }
-    const githubLoginHandler = ()=> {}
+    const githubLoginHandler = ()=> {
+        console.log('git hub login');
+        signInWithPopup(auth, githubProvider)
+          .then((result) => {
+            const loggedInUser = result.user;
+            console.log(loggedInUser);
+            setUser(loggedInUser);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
 
     const logoutHandler = ()=> {
         setUser(null)
